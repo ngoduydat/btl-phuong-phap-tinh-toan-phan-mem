@@ -1,0 +1,327 @@
+USE [master]
+GO
+/****** Object:  Database [TKB]    Script Date: 4/18/2020 11:22:04 PM ******/
+CREATE DATABASE [TKB]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'TKB_Recovered', FILENAME = N'D:\sql server\MSSQL14.SQLEXPRESS\MSSQL\DATA\TKB_Recovered.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'TKB_Recovered_log', FILENAME = N'D:\sql server\MSSQL14.SQLEXPRESS\MSSQL\DATA\TKB_Recovered_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [TKB].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [TKB] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [TKB] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [TKB] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [TKB] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [TKB] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [TKB] SET AUTO_CLOSE ON 
+GO
+ALTER DATABASE [TKB] SET AUTO_CREATE_STATISTICS ON 
+GO
+ALTER DATABASE [TKB] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [TKB] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [TKB] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [TKB] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [TKB] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [TKB] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [TKB] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [TKB] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [TKB] SET  ENABLE_BROKER 
+GO
+ALTER DATABASE [TKB] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [TKB] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [TKB] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [TKB] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [TKB] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [TKB] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [TKB] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [TKB] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [TKB] SET  MULTI_USER 
+GO
+ALTER DATABASE [TKB] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [TKB] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [TKB] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [TKB] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+USE [TKB]
+GO
+/****** Object:  StoredProcedure [dbo].[loginGV]    Script Date: 4/18/2020 11:22:04 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[loginGV]
+    @Username nvarchar(50), 
+    @Password nvarchar(50) 
+AS
+    SET NOCOUNT ON;
+    SELECT IDGV, IDMon, TenGV, NamSinh, GioiTinh, Username, [Password]
+    FROM GiaoVien
+    WHERE Username = @Username AND [Password] = @Password;
+
+
+GO
+/****** Object:  Table [dbo].[GiaoVien]    Script Date: 4/18/2020 11:22:04 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[GiaoVien](
+	[IDGV] [int] IDENTITY(1,1) NOT NULL,
+	[IDMon] [int] NULL,
+	[ChuyenKhoi] [int] NULL,
+	[TenGV] [nvarchar](100) NULL,
+	[NamSinh] [date] NULL,
+	[GioiTinh] [bit] NULL,
+	[SoTiet] [int] NULL,
+	[SoDT] [nvarchar](20) NULL,
+	[DiaChi] [nvarchar](100) NULL,
+	[Username] [nvarchar](100) NULL,
+	[Password] [nvarchar](100) NULL,
+ CONSTRAINT [PK_GiaoVien] PRIMARY KEY CLUSTERED 
+(
+	[IDGV] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[LopHoc]    Script Date: 4/18/2020 11:22:04 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LopHoc](
+	[IDLop] [int] IDENTITY(1,1) NOT NULL,
+	[IDGV] [int] NULL,
+	[IDPH] [int] NULL,
+	[Nam] [int] NULL,
+	[Khoi] [int] NULL,
+	[TenLop] [nvarchar](50) NULL,
+	[SiSo] [int] NULL,
+	[BuoiHoc] [int] NULL,
+ CONSTRAINT [PK_Lop] PRIMARY KEY CLUSTERED 
+(
+	[IDLop] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[MonHoc]    Script Date: 4/18/2020 11:22:04 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[MonHoc](
+	[IDMon] [int] IDENTITY(1,1) NOT NULL,
+	[Ten] [nvarchar](100) NULL,
+	[Khoi6] [bit] NULL,
+	[Khoi7] [bit] NULL,
+	[Khoi8] [bit] NULL,
+	[Khoi9] [bit] NULL,
+	[SoTietK6] [int] NULL,
+	[SoBuoiK6] [int] NULL,
+	[SoTietK7] [int] NULL,
+	[SoBuoiK7] [int] NULL,
+	[SoTietK8] [int] NULL,
+	[SoBuoiK8] [int] NULL,
+	[SoTietK9] [int] NULL,
+	[SoBuoiK9] [int] NULL,
+	[Kep] [bit] NULL,
+	[Phu] [bit] NULL,
+ CONSTRAINT [PK_MonHoc] PRIMARY KEY CLUSTERED 
+(
+	[IDMon] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[PhongHoc]    Script Date: 4/18/2020 11:22:04 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PhongHoc](
+	[IDPH] [int] IDENTITY(1,1) NOT NULL,
+	[TenPH] [nvarchar](50) NULL,
+	[SucChua] [int] NULL,
+	[ViTri] [nvarchar](50) NULL,
+ CONSTRAINT [PK_PhongHoc] PRIMARY KEY CLUSTERED 
+(
+	[IDPH] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[QuyenTruyCap]    Script Date: 4/18/2020 11:22:04 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[QuyenTruyCap](
+	[Taikhoan] [nvarchar](50) NULL,
+	[Matkhau] [nvarchar](50) NULL,
+	[Quyen] [nvarchar](50) NULL
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[ThoiKhoaBieu]    Script Date: 4/18/2020 11:22:04 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ThoiKhoaBieu](
+	[IDTKB] [int] IDENTITY(1,1) NOT NULL,
+	[IDGV] [int] NULL,
+	[IDLop] [int] NULL,
+	[IDMon] [int] NULL,
+	[Thu] [int] NULL,
+	[Tiet] [int] NULL,
+ CONSTRAINT [PK_ThoiKhoaBieu] PRIMARY KEY CLUSTERED 
+(
+	[IDTKB] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  View [dbo].[vGiaoVien]    Script Date: 4/18/2020 11:22:04 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW [dbo].[vGiaoVien]
+AS
+SELECT        dbo.GiaoVien.IDGV, dbo.GiaoVien.TenGV, dbo.GiaoVien.IDMon, dbo.MonHoc.Ten AS TenMon, dbo.GiaoVien.ChuyenKhoi, dbo.GiaoVien.SoTiet, 
+                         dbo.GiaoVien.NamSinh, dbo.GiaoVien.GioiTinh, dbo.GiaoVien.SoDT, dbo.GiaoVien.DiaChi
+FROM            dbo.GiaoVien LEFT OUTER JOIN
+                         dbo.MonHoc ON dbo.GiaoVien.IDMon = dbo.MonHoc.IDMon
+
+
+GO
+/****** Object:  View [dbo].[vLopHoc]    Script Date: 4/18/2020 11:22:04 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW [dbo].[vLopHoc]
+AS
+SELECT        TOP (100) PERCENT dbo.LopHoc.IDLop, dbo.LopHoc.IDGV, dbo.LopHoc.IDPH, dbo.LopHoc.Nam, dbo.LopHoc.Khoi, dbo.LopHoc.TenLop, dbo.LopHoc.SiSo, 
+                         dbo.LopHoc.BuoiHoc, dbo.GiaoVien.TenGV, dbo.PhongHoc.TenPH, dbo.PhongHoc.ViTri
+FROM            dbo.LopHoc LEFT OUTER JOIN
+                         dbo.PhongHoc ON dbo.LopHoc.IDPH = dbo.PhongHoc.IDPH LEFT OUTER JOIN
+                         dbo.GiaoVien ON dbo.LopHoc.IDGV = dbo.GiaoVien.IDGV
+
+
+GO
+ALTER TABLE [dbo].[GiaoVien] ADD  CONSTRAINT [DF_GiaoVien_IDMon]  DEFAULT ((0)) FOR [IDMon]
+GO
+ALTER TABLE [dbo].[GiaoVien] ADD  CONSTRAINT [DF_GiaoVien_ChuyenKhoi]  DEFAULT ((6)) FOR [ChuyenKhoi]
+GO
+ALTER TABLE [dbo].[GiaoVien] ADD  CONSTRAINT [DF_GiaoVien_GioiTinh]  DEFAULT ((0)) FOR [GioiTinh]
+GO
+ALTER TABLE [dbo].[GiaoVien] ADD  CONSTRAINT [DF_GiaoVien_SoTiet]  DEFAULT ((0)) FOR [SoTiet]
+GO
+ALTER TABLE [dbo].[LopHoc] ADD  CONSTRAINT [DF_LopHoc_IDGV]  DEFAULT ((0)) FOR [IDGV]
+GO
+ALTER TABLE [dbo].[LopHoc] ADD  CONSTRAINT [DF_LopHoc_IDPH]  DEFAULT ((0)) FOR [IDPH]
+GO
+ALTER TABLE [dbo].[LopHoc] ADD  CONSTRAINT [DF_LopHoc_Nam]  DEFAULT ((0)) FOR [Nam]
+GO
+ALTER TABLE [dbo].[LopHoc] ADD  CONSTRAINT [DF_LopHoc_Khoi]  DEFAULT ((6)) FOR [Khoi]
+GO
+ALTER TABLE [dbo].[LopHoc] ADD  CONSTRAINT [DF_LopHoc_SiSo]  DEFAULT ((0)) FOR [SiSo]
+GO
+ALTER TABLE [dbo].[LopHoc] ADD  CONSTRAINT [DF_LopHoc_BuoiHoc]  DEFAULT ((1)) FOR [BuoiHoc]
+GO
+ALTER TABLE [dbo].[MonHoc] ADD  CONSTRAINT [DF_MonHoc_Khoi6]  DEFAULT ((0)) FOR [Khoi6]
+GO
+ALTER TABLE [dbo].[MonHoc] ADD  CONSTRAINT [DF_MonHoc_Khoi7]  DEFAULT ((0)) FOR [Khoi7]
+GO
+ALTER TABLE [dbo].[MonHoc] ADD  CONSTRAINT [DF_MonHoc_Khoi8]  DEFAULT ((0)) FOR [Khoi8]
+GO
+ALTER TABLE [dbo].[MonHoc] ADD  CONSTRAINT [DF_MonHoc_Khoi9]  DEFAULT ((0)) FOR [Khoi9]
+GO
+ALTER TABLE [dbo].[MonHoc] ADD  CONSTRAINT [DF_MonHoc_SoTietK6]  DEFAULT ((0)) FOR [SoTietK6]
+GO
+ALTER TABLE [dbo].[MonHoc] ADD  CONSTRAINT [DF_MonHoc_SoBuoiK6]  DEFAULT ((0)) FOR [SoBuoiK6]
+GO
+ALTER TABLE [dbo].[MonHoc] ADD  CONSTRAINT [DF_MonHoc_SoTietK7]  DEFAULT ((0)) FOR [SoTietK7]
+GO
+ALTER TABLE [dbo].[MonHoc] ADD  CONSTRAINT [DF_MonHoc_SoBuoiK7]  DEFAULT ((0)) FOR [SoBuoiK7]
+GO
+ALTER TABLE [dbo].[MonHoc] ADD  CONSTRAINT [DF_MonHoc_SoTietK8]  DEFAULT ((0)) FOR [SoTietK8]
+GO
+ALTER TABLE [dbo].[MonHoc] ADD  CONSTRAINT [DF_MonHoc_SoBuoiK8]  DEFAULT ((0)) FOR [SoBuoiK8]
+GO
+ALTER TABLE [dbo].[MonHoc] ADD  CONSTRAINT [DF_MonHoc_SoTietK9]  DEFAULT ((0)) FOR [SoTietK9]
+GO
+ALTER TABLE [dbo].[MonHoc] ADD  CONSTRAINT [DF_MonHoc_SoBuoiK9]  DEFAULT ((0)) FOR [SoBuoiK9]
+GO
+ALTER TABLE [dbo].[MonHoc] ADD  CONSTRAINT [DF_MonHoc_Kep]  DEFAULT ((0)) FOR [Kep]
+GO
+ALTER TABLE [dbo].[MonHoc] ADD  CONSTRAINT [DF_MonHoc_Phu]  DEFAULT ((0)) FOR [Phu]
+GO
+ALTER TABLE [dbo].[PhongHoc] ADD  CONSTRAINT [DF_PhongHoc_SucChua]  DEFAULT ((0)) FOR [SucChua]
+GO
+ALTER TABLE [dbo].[GiaoVien]  WITH CHECK ADD  CONSTRAINT [ FK_GiaoVien_MonHoc] FOREIGN KEY([IDMon])
+REFERENCES [dbo].[MonHoc] ([IDMon])
+GO
+ALTER TABLE [dbo].[GiaoVien] CHECK CONSTRAINT [ FK_GiaoVien_MonHoc]
+GO
+ALTER TABLE [dbo].[LopHoc]  WITH CHECK ADD  CONSTRAINT [ FK_LopHoc_GiaoVien] FOREIGN KEY([IDGV])
+REFERENCES [dbo].[GiaoVien] ([IDGV])
+GO
+ALTER TABLE [dbo].[LopHoc] CHECK CONSTRAINT [ FK_LopHoc_GiaoVien]
+GO
+ALTER TABLE [dbo].[LopHoc]  WITH CHECK ADD  CONSTRAINT [ FK_LopHoc_PhongHoc] FOREIGN KEY([IDPH])
+REFERENCES [dbo].[PhongHoc] ([IDPH])
+GO
+ALTER TABLE [dbo].[LopHoc] CHECK CONSTRAINT [ FK_LopHoc_PhongHoc]
+GO
+ALTER TABLE [dbo].[ThoiKhoaBieu]  WITH CHECK ADD  CONSTRAINT [ FK_ThoiKhoaBieu_GiaoVien] FOREIGN KEY([IDGV])
+REFERENCES [dbo].[GiaoVien] ([IDGV])
+GO
+ALTER TABLE [dbo].[ThoiKhoaBieu] CHECK CONSTRAINT [ FK_ThoiKhoaBieu_GiaoVien]
+GO
+ALTER TABLE [dbo].[ThoiKhoaBieu]  WITH CHECK ADD  CONSTRAINT [ FK_ThoiKhoaBieu_LopHoc] FOREIGN KEY([IDLop])
+REFERENCES [dbo].[LopHoc] ([IDLop])
+GO
+ALTER TABLE [dbo].[ThoiKhoaBieu] CHECK CONSTRAINT [ FK_ThoiKhoaBieu_LopHoc]
+GO
+ALTER TABLE [dbo].[ThoiKhoaBieu]  WITH CHECK ADD  CONSTRAINT [ FK_ThoiKhoaBieu_MonHoc] FOREIGN KEY([IDMon])
+REFERENCES [dbo].[MonHoc] ([IDMon])
+GO
+ALTER TABLE [dbo].[ThoiKhoaBieu] CHECK CONSTRAINT [ FK_ThoiKhoaBieu_MonHoc]
+GO
+USE [master]
+GO
+ALTER DATABASE [TKB] SET  READ_WRITE 
+GO
