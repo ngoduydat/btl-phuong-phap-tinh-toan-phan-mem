@@ -104,7 +104,7 @@ class LopHoc {
     constructor() {
         this.IDLop = 0;
         this.IDGV = 0;
-        this.IDPH = 0;
+        this.TenGVCN = "";
         this.TenLop = "";
         this.Khoi = 0;
         this.SiSo = 0;
@@ -114,10 +114,13 @@ class LopHoc {
         this.Thu = [];
 
         for (var i = 0; i < this.TongThu; i++) {
-            Thu[i] = new Thu(i);
+            this.Thu.push(new Thu(i));
         }
 
-        this.DSDayHoc = new DanhSachGVDayMH();
+        this.DSDayHoc = new DanhSachGVDayMH(); //giáo viên dạy nhưng môn học của lớp dc phân ngẫu nhiên ở NST
+        this.TongTiet = 0;
+        this.TongTietHopLe = 0;
+        this.TongTietViPham = 0;
     }
 
     /**
@@ -128,7 +131,7 @@ class LopHoc {
     UpdateGVDayMonHoc(IDMon, gv) {
         this.Thu.forEach((thu) => {
             thu.Tiet.forEach((tiet) => {
-                if (tiet.IDMon == IDMon) {
+                if (tiet.IDMon === IDMon) {
                     tiet.IDGV = gv.IDGV;
                     tiet.TenGV = gv.TenGV;
                 }
@@ -137,28 +140,83 @@ class LopHoc {
     }
 
     //tính vi pham so tiet
-    //tính vi phạm số buổi
+
+    /**
+     * Hàm tính vi phạm số tiết
+     * @param {Mon} mon
+     * return true/false
+     */
+    ViPhamSoTiet(mon) {
+        var res = false;
+        this.Thu.forEach((thu) => {
+            var slTietTrongNgay = 0;
+            var viPham = false;
+            thu.Tiet.forEach((tiet) => {
+                if (Tiet.IDMon === mon.IDMon) {
+                    slTietTrongNgay++;
+                }
+                if (slTietTrongNgay > 1) {
+                    if (!mon.TietKep) {
+                        viPham = true;
+                    } else if (slTietTrongNgay > 2) {
+                        viPham = true;
+                    }
+                }
+
+                //lưu lại vị trí tiết vi phạm
+                if (viPham) {
+                    res = true;
+                    thu.Tiet.forEach((tiet) => {
+                        if (tiet.IDMon === mon.IDMon) {
+                            tiet.LoaiViPham = LoaiViPham.QuaSoTiet;
+                        }
+                    });
+                }
+            });
+        });
+
+        return res;
+    }
+
+    //hàm tính vi phạm số buổi
+
+    //hàm tính số tiết vi phạm
+    TinhSoTietViPham() {
+        var viPham = 0;
+        this.Thu.forEach((thu) => {
+            thu.Tiet.forEach((tiet) => {
+                if (LoaiViPham !== LoaiViPham.KhongViPham) viPham++;
+            });
+        });
+
+        this.TongTietViPham = viPham;
+        this.TongTietViPham = this.TongTiet - viPham;
+    }
+
+    //hàm ghép buổi
+
+    //hàm tách buổi
 }
 
 class DanhSachLopHoc {
     constructor() {
-        var danhsach = []; // list LopHoc[]
-        var Count = danhsach.length;
+        this.danhsach = []; // list LopHoc[]
+        this.Count = this.danhsach.length;
     }
 
     /**
      * hàm thêm danh sách lớp
      */
     Add(lop) {
-        danhsach.push(lop);
+        this.danhsach.push(lop);
     }
 
     /**
      * lấy lớp theo vị trí
      */
     GetLopHoc(vitri) {
-        if (danhsach.length > 0 && danhsach.length > vitri)
-            return danhsach[vitri];
+        if (this.danhsach.length > 0 && this.danhsach.length > vitri)
+            return this.danhsach[vitri];
         else return null;
     }
 
@@ -166,19 +224,141 @@ class DanhSachLopHoc {
      * hàm lấy danh sách lớp học
      */
     GetDanhSach() {
-        return danhsach;
+        return this.danhsach;
+    }
+}
+
+class GiaoVien {
+    constructor() {
+        this.IDGV = 0;
+        this.IDMon = 0;
+        this.ChuyenKhoi = 0;
+        this.TenGV = "";
+        this.SoTiet = 0;
+        this.SoTietDaDay = 0;
+        this.SoTietChuaDay = 0;
+    }
+}
+
+class DanhSachGiaoVien {
+    constructor() {
+        this.danhsach = []; //mảng GiaoVien
+        this.Count = this.danhsach.length;
+    }
+
+    Add(gv) {
+        this.danhsach.push(gv);
+    }
+
+    GetGiaoVien(vitri) {
+        if (this.danhsach.length > 0 && this.danhsach.length > vitri)
+            return this.danhsach[vitri];
+        else return null;
+    }
+
+    GetDanhSachTheoMon(IDMon) {
+        var dsGV = new DanhSachGiaoVien();
+        this.danhsach.foreach((gv) => {
+            if (gv.IDMon === IDMon) dsGV.Add(gv);
+        });
+
+        return dsGV;
+    }
+
+    GetDanhSachTheoMonTiet(idMon, soTiet) {
+        var dsGV = new DanhSachGiaoVien();
+
+        this.danhsach.forEach((gv) => {
+            if (gv.IDMon === idMon && gv.SoTietChuaDay >= soTiet) dsGV.Add(gv);
+        });
+        return dsGV;
+    }
+
+    GetDanhSachTheoMonKhoiTiet(idMon, khoi, soTiet) {
+        var dsGV = new DanhSachGiaoVien();
+        this.danhsach.forEach((gv) => {
+            if (
+                gv.IDMon === idMon &&
+                gv.ChuyenKhoi === khoi &&
+                gv.SoTietChuaDay >= soTiet
+            )
+                dsGV.Add(gv);
+        });
+
+        return dsGV;
+    }
+
+    GetNgauNhienGV() {
+        var gv = new GiaoVien();
+        if (this.danhsach.length > 0) {
+            var vt = Math.floor(Math.random() * this.Count + 1);
+            gv = this.danhsach[vt];
+        }
+        return gv;
+    }
+
+    GetDanhSach() {
+        return this.danhsach;
+    }
+}
+
+class MonHoc {
+    constructor() {
+        this.IDMon = 0;
+        this.Ten = "";
+        this.SoTiet = 0;
+        this.SoBuoi = 0;
+        this.TietKep = false;
+        this.TietPhu = false;
+    }
+
+    GetSoTiet(khoi) {
+        if (khoi === 6) return this.SoTiet;
+        // else if (khoi === 7) return SoTietK7;
+        // else if (khoi === 8) return SoTietK8;
+        // else if (khoi === 9) return SoTietK9;
+        else return 0;
+    }
+
+    GetSoBuoi(khoi) {
+        if (khoi === 6) return this.SoBuoi;
+        // else if (khoi === 7) return SoBuoiK7;
+        // else if (khoi === 8) return SoBuoiK8;
+        // else if (khoi === 9) return SoBuoiK9;
+        else return 0;
+    }
+}
+
+class DanhSachMonHoc {
+    constructor() {
+        this.danhsach = []; //mảng MonHoc
+        this.Count = this.danhsach.length;
+    }
+
+    Add(mh) {
+        this.danhsach.push(mh);
+    }
+
+    GetMonHoc(vitri) {
+        if (this.danhsach.length > 0 && this.danhsach.length > vitri)
+            return this.danhsach[vitri];
+        else return null;
+    }
+
+    GetDanhSach() {
+        return this.danhsach;
     }
 }
 
 class GVDayMonHoc {
     constructor() {
-        IDGV = 0;
-        IDMon = 0;
-        IDLop = 0;
-        SoTiet = 0;
-        TenGV = "";
-        TenMon = "";
-        TenLop = "";
+        this.IDGV = 0;
+        this.IDMon = 0;
+        this.IDLop = 0;
+        this.SoTiet = 0;
+        this.TenGV = "";
+        this.TenMon = "";
+        this.TenLop = "";
     }
 }
 
@@ -192,7 +372,7 @@ class DanhSachGVDayMH {
      * mh(GVDayMonHoc)
      */
     Add(mh) {
-        danhsach.push(mh);
+        this.danhsach.push(mh);
     }
 
     /**
@@ -201,7 +381,7 @@ class DanhSachGVDayMH {
      */
     GetItem(vitri) {
         if (this.danhsach.length > 0 && this.danhsach.length > vitri)
-            return danhsach[vitri];
+            return this.danhsach[vitri];
         else return null;
     }
 
@@ -215,10 +395,14 @@ class DanhSachGVDayMH {
 
 module.exports = {
     AppContant,
+    DanhSachGiaoVien,
     DanhSachGVDayMH,
     DanhSachLopHoc,
     GVDayMonHoc,
+    GiaoVien,
     LoaiTiet,
+    MonHoc,
+    DanhSachMonHoc,
     LoaiViPham,
     LopHoc,
     Tiet,

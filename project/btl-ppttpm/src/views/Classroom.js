@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { classrooms } from "../js/db";
+import { ViTriNgauNhien } from "../js/vitritiethoc";
 
 export default class Classroom extends Component {
     fetchRows = (data) => {
@@ -16,6 +17,7 @@ export default class Classroom extends Component {
             });
         }
     };
+
     render() {
         return (
             <table className="table table-bordered">
