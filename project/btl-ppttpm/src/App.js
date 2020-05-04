@@ -9,6 +9,7 @@ import Teacher from "./views/Teacher";
 import Classroom from "./views/Classroom";
 import Subject from "./views/Subject";
 import Scheduling from "./views/Scheduling";
+import TimeTable from "./views/TimeTable";
 
 function App() {
     return (
@@ -90,7 +91,7 @@ function App() {
                     <Route exact path="/classroom" component={Classroom} />
                     <Route exact path="/subject" component={Subject} />
                     <Route exact path="/scheduling" component={Scheduling} />
-                    <Route exact path="/time-table" component={Teacher} />
+                    <Route exact path="/time-table" component={TimeTable} />
                 </Switch>
             </div>
         </Router>

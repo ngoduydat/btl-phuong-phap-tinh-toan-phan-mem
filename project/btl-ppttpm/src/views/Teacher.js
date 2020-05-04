@@ -15,7 +15,7 @@ export default class Teacher extends Component {
                         <th scope="row">{ele.IDGV}</th>
                         <td>{ele.TenGV}</td>
 
-                        <td>{ele.TenMonHoc}</td>
+                        <td>{ele.TenMH}</td>
                         <td>{ele.SoTiet}</td>
                         <td>{ele.NamSinh}</td>
                         <td>{ele.GioiTinh}</td>

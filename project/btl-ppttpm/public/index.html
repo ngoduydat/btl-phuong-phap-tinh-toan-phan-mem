@@ -30,6 +30,59 @@
             * {
                 font-size: 13px;
             }
+
+            .widget-row-header {
+                width: 100px;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                border: 1px solid lightgray;
+                height: 30px;
+
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .widget-row-header-1 {
+                width: 90px;
+                max-width: 90px;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                border: 1px solid lightgray;
+                height: 30px;
+
+                white-space: nowrap;
+            }
+
+            .widget-fix {
+                width: 100px;
+                text-align: center;
+                height: 150px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            .widget-row {
+                width: 100px;
+                height: calc(100% / 5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .text-bold {
+                font-weight: 600;
+            }
+
+            .scroll-data {
+                width: calc(90px * 4);
+                height: auto;
+                max-height: 300px;
+                overflow: scroll;
+            }
         </style>
         <link
             rel="stylesheet"

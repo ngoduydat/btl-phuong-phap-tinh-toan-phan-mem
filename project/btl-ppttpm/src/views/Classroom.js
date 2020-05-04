@@ -1,15 +1,14 @@
 import React, { Component } from "react";
 import { classrooms } from "../js/db";
-import { ViTriNgauNhien } from "../js/vitritiethoc";
 
 export default class Classroom extends Component {
     fetchRows = (data) => {
         if (data.length > 0) {
             return data.map((ele, i) => {
                 return (
-                    <tr key={ele.IDLopHoc}>
-                        <th scope="row">{ele.IDLopHoc}</th>
-                        <td>{ele.TenLopHoc}</td>
+                    <tr key={ele.IDLop}>
+                        <th scope="row">{ele.IDLop}</th>
+                        <td>{ele.TenLop}</td>
                         <td>{ele.SiSo}</td>
                         <td>{ele.BuoiHoc}</td>
                     </tr>

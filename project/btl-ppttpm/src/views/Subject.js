@@ -6,9 +6,9 @@ export default class Subject extends Component {
         if (data.length > 0) {
             return data.map((ele, i) => {
                 return (
-                    <tr key={ele.IDMonHoc}>
-                        <th scope="row">{ele.IDMonHoc}</th>
-                        <td>{ele.TenMonHoc}</td>
+                    <tr key={ele.IDMon}>
+                        <th scope="row">{ele.IDMon}</th>
+                        <td>{ele.TenMH}</td>
                         <td>{ele.SoTiet}</td>
                         <td>{ele.SoBuoi}</td>
                         <td>{ele.TietKep ? "Có" : "Không"}</td>
