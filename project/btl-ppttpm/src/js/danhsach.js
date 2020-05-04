@@ -79,9 +79,9 @@ class ViTriNgauNhien {
     }
 
     GetNextViTri() {
-        if (this.danhsach.length > 0 && this.danhsach.length > this.viTri)
+        if (this.danhsach.length > 0 && this.danhsach.length > this.viTri) {
             return this.danhsach[this.viTri++];
-        else return null;
+        } else return null;
     }
 
     GetViTri(index) {

@@ -74,7 +74,7 @@ export default class Scheduling extends Component {
                             {nst.TongTietViPham}
                         </div>
                         <div className="widget-row-header">
-                            {nst.HeSoThichNghi}
+                            {Math.round(nst.HeSoThichNghi * 10000) / 10000}
                         </div>
                     </div>
                 );
@@ -114,9 +114,15 @@ export default class Scheduling extends Component {
                                             key={i}
                                         >
                                             {thu.Tiet.map((tiet, i) => {
+                                                console.log();
                                                 return (
                                                     <div
-                                                        className="widget-row"
+                                                        className={
+                                                            tiet.LoaiViPham ===
+                                                            1
+                                                                ? "widget-row"
+                                                                : "widget-row mark"
+                                                        }
                                                         key={i}
                                                     >
                                                         {tiet.TenMon}
@@ -145,7 +151,7 @@ export default class Scheduling extends Component {
                     </button>
 
                     <button
-                        className="btn btn-default ml-3"
+                        className="btn btn-danger ml-3"
                         onClick={this.handleEvolution}
                     >
                         Tiến hóa hết

@@ -297,6 +297,7 @@ class NhiemSacThe {
                             tiet.IDGV > 0
                         ) {
                             this.KiemTraTrungLich(tiet, lop);
+                            console.log("trung lich giao vien");
                         }
                     });
                 });

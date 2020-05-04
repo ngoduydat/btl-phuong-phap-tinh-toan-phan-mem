@@ -140,6 +140,17 @@ const teachers = [
         TenMH: "Văn",
         ChuyenKhoi: 6,
     },
+
+    {
+        IDGV: 14,
+        TenGV: "Trần Mạnh Hùng",
+        NamSinh: "28/5/1998",
+        GioiTinh: "Nam",
+        SoTiet: 9,
+        IDMon: 1,
+        TenMH: "Toán",
+        ChuyenKhoi: 6,
+    },
 ];
 
 const subjects = [
@@ -147,7 +158,7 @@ const subjects = [
         IDMon: 1,
         TenMH: "Toán",
         SoTietK6: 4,
-        SoBuoiK6: 2,
+        SoBuoiK6: 3,
         TietKep: true,
         TietPhu: false,
         Khoi6: true,
@@ -156,7 +167,7 @@ const subjects = [
         IDMon: 2,
         TenMH: "Văn",
         SoTietK6: 4,
-        SoBuoiK6: 2,
+        SoBuoiK6: 3,
         TietKep: true,
         TietPhu: false,
         Khoi6: true,

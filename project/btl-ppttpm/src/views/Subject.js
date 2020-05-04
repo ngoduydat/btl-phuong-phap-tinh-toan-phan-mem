@@ -9,8 +9,8 @@ export default class Subject extends Component {
                     <tr key={ele.IDMon}>
                         <th scope="row">{ele.IDMon}</th>
                         <td>{ele.TenMH}</td>
-                        <td>{ele.SoTiet}</td>
-                        <td>{ele.SoBuoi}</td>
+                        <td>{ele.SoTietK6}</td>
+                        <td>{ele.SoBuoiK6}</td>
                         <td>{ele.TietKep ? "Có" : "Không"}</td>
                         <td>{ele.TietPhu ? "Có" : "Không"}</td>
                     </tr>
