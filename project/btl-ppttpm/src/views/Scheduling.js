@@ -8,11 +8,11 @@ export default class Scheduling extends Component {
 
         this.nst = new NhiemSacThe();
         this.nst.ListLopHoc(classrooms);
-        this.nst.ListGiaoVien(teachers);
+        // this.nst.ListGiaoVien(teachers);
         this.nst.ListMonHoc(subjects);
         this.nst.PhanLichMonHoc();
-        this.nst.PhanGiaoVien();
-        this.nst.TinhDoThichNghi();
+        // this.nst.PhanGiaoVien();
+        // this.nst.TinhDoThichNghi();
 
         this.state = {
             data: this.nst,
