@@ -2,9 +2,22 @@ import React, { Component } from "react";
 import { subjects } from "../js/db1";
 
 export default class Subject extends Component {
+    constructor(prop) {
+        super(prop);
+
+        var subjects = JSON.parse(localStorage.getItem("subjects"));
+        var classrooms = JSON.parse(localStorage.getItem("classrooms"));
+        var teachers = JSON.parse(localStorage.getItem("teachers"));
+
+        this.state = {
+            classrooms: classrooms,
+            teachers: teachers,
+            subjects: subjects,
+        };
+    }
     fetchRows = (data) => {
-        if (data.length > 0) {
-            return data.map((ele, i) => {
+        if (this.state.subjects.length > 0) {
+            return this.state.subjects.map((ele, i) => {
                 return (
                     <tr key={ele.IDMon}>
                         <th scope="row">{ele.IDMon}</th>
