@@ -1,18 +1,23 @@
 import React, { Component } from "react";
 import { NhiemSacThe } from "../js/nhiemsacthe";
-import { classrooms, subjects, teachers } from "../js/db";
 
 export default class Scheduling extends Component {
     constructor(props) {
         super(props);
 
+        var subjects = JSON.parse(localStorage.getItem("subjects"));
+        var classrooms = JSON.parse(localStorage.getItem("classrooms"));
+        var teachers = JSON.parse(localStorage.getItem("teachers"));
+
         this.nst = new NhiemSacThe();
         this.nst.ListLopHoc(classrooms);
-        // this.nst.ListGiaoVien(teachers);
+        this.nst.ListGiaoVien(teachers);
         this.nst.ListMonHoc(subjects);
         this.nst.PhanLichMonHoc();
-        // this.nst.PhanGiaoVien();
-        // this.nst.TinhDoThichNghi();
+        this.nst.PhanGiaoVien();
+        this.nst.TinhDoThichNghi();
+
+        console.log(this.nst);
 
         this.state = {
             data: this.nst,
@@ -27,15 +32,10 @@ export default class Scheduling extends Component {
     };
 
     handleEvolution = () => {
-        for (var i = 0; i < 10000; i++) {
+        do {
             this.nst.TienHoa();
             this.saveReport();
-        }
-
-        // do {
-        //     this.nst.TienHoa();
-        //     console.log(this.nst);
-        // } while (this.nst.HeSoThichNghi != 1);
+        } while (this.nst.HeSoThichNghi != 1);
     };
 
     saveReport = () => {
@@ -84,7 +84,7 @@ export default class Scheduling extends Component {
 
     fetch = () => {
         if (this.state.data !== null) {
-            return this.state.data.DSLop.map((lop, i) => {
+            return this.state.data.DSLop.danhsach.map((lop, i) => {
                 return (
                     <div key={i}>
                         <h6>{lop.TenLop}</h6>
@@ -114,7 +114,18 @@ export default class Scheduling extends Component {
                                             key={i}
                                         >
                                             {thu.Tiet.map((tiet, i) => {
-                                                console.log();
+                                                var tenGV = "";
+                                                var filtered = this.state.data.DSGiaoVien.danhsach.filter(
+                                                    (ele) => {
+                                                        if (
+                                                            ele.IDGV ===
+                                                            tiet.IDGV
+                                                        ) {
+                                                            return true;
+                                                        }
+                                                    }
+                                                );
+
                                                 return (
                                                     <div
                                                         className={
@@ -126,6 +137,9 @@ export default class Scheduling extends Component {
                                                         key={i}
                                                     >
                                                         {tiet.TenMon}
+                                                        {/* {filtered.length === 1
+                                                            ? `(${filtered[0].TenGV})`
+                                                            : ""} */}
                                                     </div>
                                                 );
                                             })}
@@ -164,7 +178,7 @@ export default class Scheduling extends Component {
                         Dừng
                     </button> */}
                 </div>
-                <div className="row">
+                {/* <div className="row">
                     <div className="col-md-4">
                         <div className="scroll-data">
                             <div className="d-flex justify-content-start align-items-center">
@@ -186,6 +200,36 @@ export default class Scheduling extends Component {
                     </div>
                     <div className="col-md-8 text-center">
                         <h5>Danh sách thời khóa biểu khối 6</h5>
+                        {this.fetch()}
+                    </div>
+                </div> */}
+                <div className="row">
+                    <div className="col-md-12">
+                        <div className="scroll-data">
+                            <div className="d-flex justify-content-start align-items-center">
+                                <div className="widget-row-header-1">
+                                    Thế hệ
+                                </div>
+                                <div className="widget-row-header-1">
+                                    Số tiết hợp lệ
+                                </div>
+                                <div className="widget-row-header-1">
+                                    Số tiết vi phạm
+                                </div>
+                                <div className="widget-row-header-1">
+                                    H/s thích nghi
+                                </div>
+                            </div>
+                            {this.fetchReport()}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="row">
+                    <div className="col-md-12 text-center">
+                        <h5 className="my-5">
+                            Danh sách thời khóa biểu khối 6, 7
+                        </h5>
                         {this.fetch()}
                     </div>
                 </div>

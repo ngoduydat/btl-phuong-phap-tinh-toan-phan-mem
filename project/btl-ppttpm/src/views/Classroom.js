@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { classrooms } from "../js/db";
+import { classrooms } from "../js/db1";
 
 export default class Classroom extends Component {
     fetchRows = (data) => {

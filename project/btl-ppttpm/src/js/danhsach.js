@@ -48,31 +48,33 @@ class ViTriNgauNhien {
         this.viTri = 0;
 
         var vitriDau, vitriCuoi;
+
         for (var thu = AppContant.Thu2; thu <= AppContant.Thu7; thu++)
             for (
                 var tiet = AppContant.Tiet1;
                 tiet <= AppContant.Tiet5;
                 tiet++
             ) {
-                vitriDau = Math.floor(Math.random() * 30 + 1); // 30 tiết trong tuần
-                vitriCuoi = Math.floor(Math.random() * 30 + 1); // 30 tiết trong tuần
-                var tmp = new ViTriTietHoc();
+                vitriDau = Math.floor(Math.random() * 30); // 30 tiết trong tuần
+                vitriCuoi = Math.floor(Math.random() * 30); // 30 tiết trong tuần
+
                 if (vitriDau !== vitriCuoi) {
+                    var tmp = new ViTriTietHoc();
                     //swap vị trí
 
-                    if (
-                        typeof danhsach[vitriDau] !== "undefined" &&
-                        typeof danhsach[vitriCuoi] !== "undefined"
-                    ) {
-                        tmp.Thu = danhsach[vitriDau].Thu;
-                        tmp.Tiet = danhsach[vitriDau].Tiet;
+                    // if (
+                    //     typeof danhsach[vitriDau] !== "undefined" &&
+                    //     typeof danhsach[vitriCuoi] !== "undefined"
+                    // ) {
+                    tmp.Thu = danhsach[vitriDau].Thu;
+                    tmp.Tiet = danhsach[vitriDau].Tiet;
 
-                        danhsach[vitriDau].Thu = danhsach[vitriCuoi].Thu;
-                        danhsach[vitriDau].Tiet = danhsach[vitriCuoi].Tiet;
+                    danhsach[vitriDau].Thu = danhsach[vitriCuoi].Thu;
+                    danhsach[vitriDau].Tiet = danhsach[vitriCuoi].Tiet;
 
-                        danhsach[vitriCuoi].Thu = tmp.Thu;
-                        danhsach[vitriCuoi].Tiet = tmp.Tiet;
-                    }
+                    danhsach[vitriCuoi].Thu = tmp.Thu;
+                    danhsach[vitriCuoi].Tiet = tmp.Tiet;
+                    // }
                 }
             }
         this.danhsach = danhsach;
@@ -242,8 +244,6 @@ class LopHoc {
         });
     }
 
-    //tính vi pham so tiet
-
     /**
      * Hàm tính vi phạm số tiết
      * @param {Mon} mon
@@ -288,11 +288,15 @@ class LopHoc {
         var tongBuoi = 0;
 
         this.Thu.forEach((thu) => {
+            var soTiet = 0;
             thu.Tiet.forEach((tiet) => {
                 if (tiet.IDMon == mon.IDMon) {
-                    tongBuoi++;
+                    soTiet++;
                 }
             });
+            if (soTiet > 0) {
+                tongBuoi++;
+            }
         });
 
         var vp = LoaiViPham.KhongViPham;
@@ -462,7 +466,7 @@ class LopHoc {
 class DanhSachLopHoc {
     constructor() {
         this.danhsach = []; // list LopHoc[]
-        this.Count = this.danhsach.length;
+        this.Count = 0;
     }
 
     /**

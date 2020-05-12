@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { subjects } from "../js/db";
+import { subjects } from "../js/db1";
 
 export default class Subject extends Component {
     fetchRows = (data) => {
