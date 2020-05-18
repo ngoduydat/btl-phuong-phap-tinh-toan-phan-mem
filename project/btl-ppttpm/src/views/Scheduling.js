@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { NhiemSacThe } from "../js/nhiemsacthe";
-
+import NhiemSacThe from "../js/nhiemsacthe";
 export default class Scheduling extends Component {
     constructor(props) {
         super(props);

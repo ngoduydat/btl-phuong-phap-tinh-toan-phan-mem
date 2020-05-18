@@ -1,22 +1,23 @@
-const {
-    AppContant,
-    LopHoc,
-    LoaiTiet,
-    GiaoVien,
-    MonHoc,
-    DanhSachGiaoVien,
-    DanhSachLopHoc,
-    DanhSachMonHoc,
-    DanhSachGVDayMH,
-    GVDayMonHoc,
-    LoaiViPham,
-    ViTriNgauNhien,
-    ViTriTietHoc,
-    Tiet,
-} = require("./danhsach");
-const { classrooms, teachers, subjects } = require("./db1");
+// const {
+//     ds.AppContant,
+//     LopHoc,
+//     ds.LoaiTiet,
+//     GiaoVien,
+//     MonHoc,
+//     DanhSachGiaoVien,
+//     DanhSachLopHoc,
+//     DanhSachMonHoc,
+//     DanhSachGVDayMH,
+//     GVDayMonHoc,
+//     LoaiViPham,
+//     ViTriNgauNhien,
+//     ds.ViTriTietHoc,
+//     Tiet,
+// } = require("./danhsach");
 
-class NhiemSacThe {
+import ds from "./danhsach";
+
+export default class NhiemSacThe {
     constructor() {
         // this.DSLop = []; //new DanhSachLopHoc();
         // this.DSPhong = []; //new DanhSachPhongHoc();
@@ -24,11 +25,11 @@ class NhiemSacThe {
         // this.DSGiaoVien = []; //new DanhSachGiaoVien();
         // this.DSDayHoc = []; //new DanhSachGVDayMH();
 
-        this.DSLop = new DanhSachLopHoc();
+        this.DSLop = new ds.DanhSachLopHoc();
         this.DSPhong = [];
-        this.DSMon = new DanhSachMonHoc();
-        this.DSGiaoVien = new DanhSachGiaoVien();
-        this.DSDayHoc = new DanhSachGVDayMH();
+        this.DSMon = new ds.DanhSachMonHoc();
+        this.DSGiaoVien = new ds.DanhSachGiaoVien();
+        this.DSDayHoc = new ds.DanhSachGVDayMH();
 
         this.TheHe = 0;
         this.TongTiet = 0;
@@ -40,7 +41,7 @@ class NhiemSacThe {
     ListLopHoc(dt) {
         if (dt !== null) {
             dt.forEach((row) => {
-                var lop = new LopHoc();
+                var lop = new ds.LopHoc();
 
                 lop.IDLop = row["IDLop"];
                 if (typeof row.IDGV !== "null") lop.IDGV = row["IDGV"];
@@ -52,68 +53,71 @@ class NhiemSacThe {
                 if (typeof row.BuoiHoc !== "null") lop.BuoiHoc = row["BuoiHoc"];
 
                 //Xây dựng tiết Chào Cờ, Sinh Hoạt
-                lop.Thu[AppContant.Thu7].Tiet[AppContant.Tiet5].Loai =
-                    LoaiTiet.SinhHoat;
-                lop.Thu[AppContant.Thu7].Tiet[AppContant.Tiet5].TenMon =
+                lop.Thu[ds.AppContant.Thu7].Tiet[ds.AppContant.Tiet5].Loai =
+                    ds.LoaiTiet.SinhHoat;
+                lop.Thu[ds.AppContant.Thu7].Tiet[ds.AppContant.Tiet5].TenMon =
                     "Sinh hoạt";
-                if (lop.BuoiHoc == AppContant.BuoiSang) {
-                    lop.Thu[AppContant.Thu2].Tiet[AppContant.Tiet1].Loai =
-                        LoaiTiet.ChaoCo;
-                    lop.Thu[AppContant.Thu2].Tiet[AppContant.Tiet1].TenMon =
-                        "Chào cờ";
+                if (lop.BuoiHoc == ds.AppContant.BuoiSang) {
+                    lop.Thu[ds.AppContant.Thu2].Tiet[ds.AppContant.Tiet1].Loai =
+                        ds.LoaiTiet.ChaoCo;
+                    lop.Thu[ds.AppContant.Thu2].Tiet[
+                        ds.AppContant.Tiet1
+                    ].TenMon = "Chào cờ";
                 } else {
-                    lop.Thu[AppContant.Thu2].Tiet[AppContant.Tiet5].Loai =
-                        LoaiTiet.ChaoCo;
-                    lop.Thu[AppContant.Thu2].Tiet[AppContant.Tiet5].TenMon =
-                        "Chào cờ";
+                    lop.Thu[ds.AppContant.Thu2].Tiet[ds.AppContant.Tiet5].Loai =
+                        ds.LoaiTiet.ChaoCo;
+                    lop.Thu[ds.AppContant.Thu2].Tiet[
+                        ds.AppContant.Tiet5
+                    ].TenMon = "Chào cờ";
                 }
 
                 //Giáo viên chủ nhiệm ở tiết sinh hoạt
-                lop.Thu[AppContant.Thu7].Tiet[AppContant.Tiet5].IDGV = lop.IDGV;
+                lop.Thu[ds.AppContant.Thu7].Tiet[ds.AppContant.Tiet5].IDGV =
+                    lop.IDGV;
 
                 //Lock các tiết không học
                 if (lop.Khoi === 6) {
                     lop.TongTiet = 24;
-                    lop.Thu[AppContant.Thu3].Tiet[AppContant.Tiet5].Loai =
-                        LoaiTiet.KhongHoc;
-                    lop.Thu[AppContant.Thu4].Tiet[AppContant.Tiet4].Loai =
-                        LoaiTiet.KhongHoc;
-                    lop.Thu[AppContant.Thu4].Tiet[AppContant.Tiet5].Loai =
-                        LoaiTiet.KhongHoc;
-                    lop.Thu[AppContant.Thu5].Tiet[AppContant.Tiet4].Loai =
-                        LoaiTiet.KhongHoc;
-                    lop.Thu[AppContant.Thu5].Tiet[AppContant.Tiet5].Loai =
-                        LoaiTiet.KhongHoc;
-                    lop.Thu[AppContant.Thu6].Tiet[AppContant.Tiet5].Loai =
-                        LoaiTiet.KhongHoc;
+                    lop.Thu[ds.AppContant.Thu3].Tiet[ds.AppContant.Tiet5].Loai =
+                        ds.LoaiTiet.KhongHoc;
+                    lop.Thu[ds.AppContant.Thu4].Tiet[ds.AppContant.Tiet4].Loai =
+                        ds.LoaiTiet.KhongHoc;
+                    lop.Thu[ds.AppContant.Thu4].Tiet[ds.AppContant.Tiet5].Loai =
+                        ds.LoaiTiet.KhongHoc;
+                    lop.Thu[ds.AppContant.Thu5].Tiet[ds.AppContant.Tiet4].Loai =
+                        ds.LoaiTiet.KhongHoc;
+                    lop.Thu[ds.AppContant.Thu5].Tiet[ds.AppContant.Tiet5].Loai =
+                        ds.LoaiTiet.KhongHoc;
+                    lop.Thu[ds.AppContant.Thu6].Tiet[ds.AppContant.Tiet5].Loai =
+                        ds.LoaiTiet.KhongHoc;
                 } else if (lop.Khoi == 7) {
                     lop.TongTiet = 25;
-                    lop.Thu[AppContant.Thu3].Tiet[AppContant.Tiet5].Loai =
-                        LoaiTiet.KhongHoc;
-                    lop.Thu[AppContant.Thu4].Tiet[AppContant.Tiet5].Loai =
-                        LoaiTiet.KhongHoc;
-                    lop.Thu[AppContant.Thu5].Tiet[AppContant.Tiet4].Loai =
-                        LoaiTiet.KhongHoc;
-                    lop.Thu[AppContant.Thu5].Tiet[AppContant.Tiet5].Loai =
-                        LoaiTiet.KhongHoc;
-                    lop.Thu[AppContant.Thu6].Tiet[AppContant.Tiet5].Loai =
-                        LoaiTiet.KhongHoc;
+                    lop.Thu[ds.AppContant.Thu3].Tiet[ds.AppContant.Tiet5].Loai =
+                        ds.LoaiTiet.KhongHoc;
+                    lop.Thu[ds.AppContant.Thu4].Tiet[ds.AppContant.Tiet5].Loai =
+                        ds.LoaiTiet.KhongHoc;
+                    lop.Thu[ds.AppContant.Thu5].Tiet[ds.AppContant.Tiet4].Loai =
+                        ds.LoaiTiet.KhongHoc;
+                    lop.Thu[ds.AppContant.Thu5].Tiet[ds.AppContant.Tiet5].Loai =
+                        ds.LoaiTiet.KhongHoc;
+                    lop.Thu[ds.AppContant.Thu6].Tiet[ds.AppContant.Tiet5].Loai =
+                        ds.LoaiTiet.KhongHoc;
                 } else if (lop.Khoi == 8) {
                     lop.TongTiet = 27;
-                    lop.Thu[AppContant.Thu4].Tiet[AppContant.Tiet5].Loai =
-                        LoaiTiet.KhongHoc;
-                    lop.Thu[AppContant.Thu5].Tiet[AppContant.Tiet4].Loai =
-                        LoaiTiet.KhongHoc;
-                    lop.Thu[AppContant.Thu5].Tiet[AppContant.Tiet5].Loai =
-                        LoaiTiet.KhongHoc;
+                    lop.Thu[ds.AppContant.Thu4].Tiet[ds.AppContant.Tiet5].Loai =
+                        ds.LoaiTiet.KhongHoc;
+                    lop.Thu[ds.AppContant.Thu5].Tiet[ds.AppContant.Tiet4].Loai =
+                        ds.LoaiTiet.KhongHoc;
+                    lop.Thu[ds.AppContant.Thu5].Tiet[ds.AppContant.Tiet5].Loai =
+                        ds.LoaiTiet.KhongHoc;
                 } else if (lop.Khoi == 9) {
                     lop.TongTiet = 27;
-                    lop.Thu[AppContant.Thu3].Tiet[AppContant.Tiet5].Loai =
-                        LoaiTiet.KhongHoc;
-                    lop.Thu[AppContant.Thu5].Tiet[AppContant.Tiet4].Loai =
-                        LoaiTiet.KhongHoc;
-                    lop.Thu[AppContant.Thu5].Tiet[AppContant.Tiet5].Loai =
-                        LoaiTiet.KhongHoc;
+                    lop.Thu[ds.AppContant.Thu3].Tiet[ds.AppContant.Tiet5].Loai =
+                        ds.LoaiTiet.KhongHoc;
+                    lop.Thu[ds.AppContant.Thu5].Tiet[ds.AppContant.Tiet4].Loai =
+                        ds.LoaiTiet.KhongHoc;
+                    lop.Thu[ds.AppContant.Thu5].Tiet[ds.AppContant.Tiet5].Loai =
+                        ds.LoaiTiet.KhongHoc;
                 }
 
                 this.TongTiet += lop.TongTiet;
@@ -125,7 +129,7 @@ class NhiemSacThe {
     ListGiaoVien(dt) {
         if (dt !== null) {
             dt.forEach((row) => {
-                var gv = new GiaoVien();
+                var gv = new ds.GiaoVien();
 
                 gv.IDGV = row.IDGV;
                 if (typeof row.TenGV !== "null") gv.TenGV = row.TenGV;
@@ -143,7 +147,7 @@ class NhiemSacThe {
     ListMonHoc(dt) {
         if (dt !== null) {
             dt.forEach((row) => {
-                var mh = new MonHoc();
+                var mh = new ds.MonHoc();
 
                 mh.IDMon = row["IDMon"];
                 if (typeof row.TenMH !== "null") mh.Ten = row["TenMH"];
@@ -180,10 +184,10 @@ class NhiemSacThe {
     }
 
     PhanLichMonHoc() {
-        var vt; // ViTriTietHoc
+        var vt; // ds.ViTriTietHoc
         var soTiet;
 
-        var rndTiet = new ViTriNgauNhien();
+        var rndTiet = new ds.ViTriNgauNhien();
 
         if (this.DSLop.danhsach.length > 0 && this.DSMon.danhsach.length > 0) {
             this.DSLop.danhsach.forEach((lop) => {
@@ -200,7 +204,7 @@ class NhiemSacThe {
                             if (vt == null) break;
                         } while (
                             lop.Thu[vt.Thu].Tiet[vt.Tiet].Loai !==
-                            LoaiTiet.BinhThuong
+                            ds.LoaiTiet.BinhThuong
                         );
 
                         if (vt != null) {
@@ -223,7 +227,7 @@ class NhiemSacThe {
                     var soTiet = mon.GetSoTiet(lop.Khoi);
 
                     if (soTiet > 0) {
-                        var dsGiaoVien = new DanhSachGiaoVien();
+                        var dsGiaoVien = new ds.DanhSachGiaoVien();
                         //Láy danh sách giáo viên theo môn, chuyên khối
 
                         dsGiaoVien = this.DSGiaoVien.danhsach.filter((gv) => {
@@ -256,7 +260,7 @@ class NhiemSacThe {
                             );
                             var giaoVien = dsGiaoVien[rndIndexGiaoVien]; // Láy ngẫu nhiên một giáo viên
 
-                            var day = new GVDayMonHoc();
+                            var day = new ds.GVDayMonHoc();
                             day.IDLop = lop.IDLop;
                             day.IDMon = mon.IDMon;
                             day.IDGV = giaoVien.IDGV;
@@ -277,17 +281,17 @@ class NhiemSacThe {
     } //PhanGiaoVien
 
     KiemTraTrungLich(tietKT, lopKT) {
-        var vt = new ViTriTietHoc(tietKT.Thu, tietKT.Index);
+        var vt = new ds.ViTriTietHoc(tietKT.Thu, tietKT.Index);
 
         this.DSLop.danhsach.forEach((lop) => {
             var tiet = lop.Thu[vt.Thu].Tiet[vt.Tiet]; //cùng thứ cùng tiết
 
             if (lop != lopKT && lop.BuoiHoc == lopKT.BuoiHoc)
                 if (lop.BuoiHoc == lopKT.BuoiHoc)
-                    if (tiet.Loai == LoaiTiet.BinhThuong)
+                    if (tiet.Loai == ds.LoaiTiet.BinhThuong)
                         if (tiet.IDGV == tietKT.IDGV) {
-                            tiet.LoaiViPham = LoaiViPham.TrungLichGiaoVien;
-                            tietKT.LoaiViPham = LoaiViPham.TrungLichGiaoVien;
+                            tiet.LoaiViPham = ds.LoaiViPham.TrungLichGiaoVien;
+                            tietKT.LoaiViPham = ds.LoaiViPham.TrungLichGiaoVien;
                         }
         });
     }
@@ -305,7 +309,7 @@ class NhiemSacThe {
             this.DSLop.danhsach.forEach((lop) => {
                 lop.Thu.forEach((thu) => {
                     thu.Tiet.forEach((tiet) => {
-                        tiet.LoaiViPham = LoaiViPham.KhongViPham;
+                        tiet.LoaiViPham = ds.LoaiViPham.KhongViPham;
                     });
                 });
 
@@ -318,11 +322,11 @@ class NhiemSacThe {
                 lop.Thu.forEach((thu) => {
                     thu.Tiet.forEach((tiet) => {
                         if (
-                            tiet.Loai === LoaiTiet.BinhThuong &&
+                            tiet.Loai === ds.LoaiTiet.BinhThuong &&
                             tiet.IDGV === 0
                         ) {
                             console.log("thieu giao vien");
-                            tiet.LoaiViPham = LoaiViPham.ThieuGiaoVien;
+                            tiet.LoaiViPham = ds.LoaiViPham.ThieuGiaoVien;
                         }
                     });
                 });
@@ -333,7 +337,7 @@ class NhiemSacThe {
                 lop.Thu.forEach((thu) => {
                     thu.Tiet.forEach((tiet) => {
                         if (
-                            tiet.Loai === LoaiTiet.BinhThuong &&
+                            tiet.Loai === ds.LoaiTiet.BinhThuong &&
                             tiet.IDGV > 0
                         ) {
                             this.KiemTraTrungLich(tiet, lop);
@@ -374,15 +378,16 @@ class NhiemSacThe {
             this.DSLop.danhsach.forEach((lop) => {
                 lop.Thu.forEach((thu) => {
                     thu.Tiet.forEach((tiet) => {
-                        if (tiet.LoaiViPham !== LoaiViPham.KhongViPham)
-                            if (tiet.LoaiViPham === LoaiViPham.QuaSoBuoi) {
+                        if (tiet.LoaiViPham !== ds.LoaiViPham.KhongViPham)
+                            if (tiet.LoaiViPham === ds.LoaiViPham.QuaSoBuoi) {
                                 lop.GhepBuoi(tiet);
                             } else if (
-                                tiet.LoaiViPham === LoaiViPham.ThieuSoBuoi
+                                tiet.LoaiViPham === ds.LoaiViPham.ThieuSoBuoi
                             )
                                 lop.TachBuoi(tiet);
                             else if (
-                                tiet.LoaiViPham === LoaiViPham.TrungLichGiaoVien
+                                tiet.LoaiViPham ===
+                                ds.LoaiViPham.TrungLichGiaoVien
                             )
                                 this.ChuyenTietTrungLich(tiet, lop);
                     });
@@ -400,13 +405,13 @@ class NhiemSacThe {
      */
     ChuyenTietTrungLich(tiet, lop) {
         var tietB; // instant Tiet
-        var vt; // instant ViTriTietHoc
-        var rndVT = new ViTriNgauNhien();
+        var vt; // instant ds.ViTriTietHoc
+        var rndVT = new ds.ViTriNgauNhien();
         while (true) {
             vt = rndVT.GetNextViTri(); //láy một vị trí tiết học bất kỳ
             if (vt == null) break;
             tietB = lop.Thu[vt.Thu].Tiet[vt.Tiet];
-            if (tietB != tiet && tietB.Loai == LoaiTiet.BinhThuong)
+            if (tietB != tiet && tietB.Loai == ds.LoaiTiet.BinhThuong)
                 if (tietB.IDGV != tiet.IDGV && tietB.IDMon != tiet.IDMon)
                     if (
                         !this.TrungLichGiaoVien(
@@ -430,7 +435,7 @@ class NhiemSacThe {
                             //Không trùng lịch ở vị trí mới
 
                             // tiet.SwapNoiDungTiet(tietB);
-                            var temp = new Tiet(0, 0); // khai báo instant Tiet()
+                            var temp = new ds.Tiet(0, 0); // khai báo instant Tiet()
                             temp.IDMon = tiet.IDMon;
                             temp.TenMon = tiet.TenMon;
                             temp.IDGV = tiet.IDGV;
@@ -452,8 +457,8 @@ class NhiemSacThe {
                             tietB.TietKep = temp.TietKep;
                             tietB.TietPhu = temp.TietPhu;
 
-                            tiet.LoaiViPham = LoaiViPham.DangXuLy;
-                            tietB.LoaiViPham = LoaiViPham.DangXuLy;
+                            tiet.LoaiViPham = ds.LoaiViPham.DangXuLy;
+                            tietB.LoaiViPham = ds.LoaiViPham.DangXuLy;
                             break;
                         }
         }
@@ -471,7 +476,7 @@ class NhiemSacThe {
             var tiet = lop.Thu[iThu].Tiet[iTiet]; //cùng thứ, cùng tiết
             if (lop != lopKT && lop.BuoiHoc == lopKT.BuoiHoc)
                 if (lop.BuoiHoc == lopKT.BuoiHoc)
-                    if (tiet.Loai == LoaiTiet.BinhThuong)
+                    if (tiet.Loai == ds.LoaiTiet.BinhThuong)
                         if (tiet.IDGV == IDGV)
                             // khác lớp
                             // cùng buổi học
@@ -483,6 +488,6 @@ class NhiemSacThe {
     }
 }
 
-module.exports = {
-    NhiemSacThe,
-};
+// module.exports = {
+//     NhiemSacThe: NhiemSacThe,
+// };

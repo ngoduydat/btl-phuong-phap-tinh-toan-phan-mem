@@ -105,6 +105,7 @@ class App extends Component {
                             component={Scheduling}
                         />
                         <Route exact path="/time-table" component={TimeTable} />
+                        <Route component={Teacher} />
                     </Switch>
                 </div>
             </Router>

@@ -673,7 +673,7 @@ class DanhSachGVDayMH {
     }
 }
 
-module.exports = {
+export default {
     AppContant,
     DanhSachGiaoVien,
     DanhSachGVDayMH,
