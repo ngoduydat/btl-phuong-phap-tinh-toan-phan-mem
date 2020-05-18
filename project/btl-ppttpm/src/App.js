@@ -23,7 +23,7 @@ class App extends Component {
     render() {
         return (
             <Router>
-                <div className="container">
+                <div className="container header-fixed">
                     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
                         <button
                             className="navbar-toggler"

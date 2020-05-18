@@ -22,6 +22,7 @@ export default class Scheduling extends Component {
         this.state = {
             data: this.nst,
             report: [],
+            isSuccess: false,
         };
     }
 
@@ -51,6 +52,16 @@ export default class Scheduling extends Component {
         this.setState({
             data: this.nst,
             report: newReport,
+            isSuccess: obj.HeSoThichNghi === 1 ? true : false,
+            isShow: 0,
+        });
+    };
+
+    _onChange = (event) => {
+        var name = event.target.name;
+        var value = event.target.value;
+        this.setState({
+            [name]: value.toString(),
         });
     };
 
@@ -60,13 +71,15 @@ export default class Scheduling extends Component {
 
     fetchReport = () => {
         if (this.state.report.length > 0) {
-            return this.state.report.map((nst, i) => {
+            return this.state.report.reverse().map((nst, i) => {
                 return (
                     <div
                         className="d-flex justify-content-start align-items-center"
                         key={i}
                     >
-                        <div className="widget-row-header">{i + 1}</div>
+                        <div className="widget-row-header">
+                            {Math.abs(this.state.report.length - i)}
+                        </div>
                         <div className="widget-row-header">
                             {nst.TongTietHopLe}
                         </div>
@@ -87,7 +100,7 @@ export default class Scheduling extends Component {
             return this.state.data.DSLop.danhsach.map((lop, i) => {
                 return (
                     <div key={i}>
-                        <h6>{lop.TenLop}</h6>
+                        <h6 className="my-4">{lop.TenLop}</h6>
                         <div className=" d-flex flex-column">
                             <div className="d-flex justify-content-start align-items-center">
                                 <div className="widget-row-header">Tiết</div>
@@ -137,9 +150,13 @@ export default class Scheduling extends Component {
                                                         key={i}
                                                     >
                                                         {tiet.TenMon}
-                                                        {/* {filtered.length === 1
-                                                            ? `(${filtered[0].TenGV})`
-                                                            : ""} */}
+                                                        {filtered.length ===
+                                                            1 &&
+                                                        parseInt(
+                                                            this.state.isShow
+                                                        ) === 1
+                                                            ? `( ${filtered[0].TenGV} )`
+                                                            : ""}
                                                     </div>
                                                 );
                                             })}
@@ -153,6 +170,12 @@ export default class Scheduling extends Component {
             });
         }
     };
+
+    handleSaveTimetable = () => {
+        localStorage.setItem("data", JSON.stringify(this.state.data));
+        this.props.history.push("/time-table");
+    };
+
     render() {
         return (
             <>
@@ -170,39 +193,8 @@ export default class Scheduling extends Component {
                     >
                         Tiến hóa hết
                     </button>
-
-                    {/* <button
-                        className="btn btn-default ml-3"
-                        onClick={this.handleStop}
-                    >
-                        Dừng
-                    </button> */}
                 </div>
-                {/* <div className="row">
-                    <div className="col-md-4">
-                        <div className="scroll-data">
-                            <div className="d-flex justify-content-start align-items-center">
-                                <div className="widget-row-header-1">
-                                    Thế hệ
-                                </div>
-                                <div className="widget-row-header-1">
-                                    Số tiết hợp lệ
-                                </div>
-                                <div className="widget-row-header-1">
-                                    Số tiết vi phạm
-                                </div>
-                                <div className="widget-row-header-1">
-                                    H/s thích nghi
-                                </div>
-                            </div>
-                            {this.fetchReport()}
-                        </div>
-                    </div>
-                    <div className="col-md-8 text-center">
-                        <h5>Danh sách thời khóa biểu khối 6</h5>
-                        {this.fetch()}
-                    </div>
-                </div> */}
+
                 <div className="row">
                     <div className="col-md-12">
                         <div className="scroll-data">
@@ -230,6 +222,34 @@ export default class Scheduling extends Component {
                         <h5 className="my-5">
                             Danh sách thời khóa biểu khối 6, 7
                         </h5>
+                        <div className="row text-right">
+                            <div className="col-6">
+                                <select
+                                    style={{ width: 200 }}
+                                    className="form-control"
+                                    onChange={this._onChange}
+                                    name="isShow"
+                                    value={this.state.isShow}
+                                >
+                                    <option value="1">
+                                        Hiển thị tên giáo viên
+                                    </option>
+                                    <option value="0">
+                                        Không hiển thị tên giáo viên
+                                    </option>
+                                </select>
+                            </div>
+                            <div className="col-6">
+                                {this.state.isSuccess && (
+                                    <button
+                                        className="btn btn-success ml-3"
+                                        onClick={this.handleSaveTimetable}
+                                    >
+                                        Lưu thời khóa biểu
+                                    </button>
+                                )}
+                            </div>
+                        </div>
                         {this.fetch()}
                     </div>
                 </div>
